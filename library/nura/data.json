@@ -1,0 +1,12 @@
+{
+	"id": "nura",
+	"title": "Nurarihyon no Mago",
+	"chapters": {
+		"ch00001": {
+			"lang": [ "en", "jp"],
+			"en": "chapters/ch00001/en",
+			"jp": "chapters/ch00001/jp"
+		}
+	},
+	"cover": "covers/vol1.jpg"
+}
