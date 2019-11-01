@@ -1,12 +1,12 @@
 {
-	"id": "kimetsu",
 	"title": "Kimetsu no Yaiba",
-	"chapters": {
-		"ch00070": {
+	"chapters": [
+		{
+			"id": "ch00070.00",
 			"lang": [ "en", "jp"],
 			"en": "chapters/ch00070/en",
 			"jp": "chapters/ch00070/jp"
 		}
-	},
+	],
 	"cover": "covers/vol1.jpg"
 }

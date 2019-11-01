@@ -24,10 +24,14 @@ const createWindow = () => {
       nodeIntegration: true,
       webSecurity: false
     },
-    // height: 600,
-    // width: 800
-    fullscreen: true
+    height: 600,
+    width: 800,
+    resizable: true,
+    show: false
   });
+
+  mainWindow.maximize();
+  mainWindow.show();
 
   console.log(LIBRARY_PATH);
 
@@ -54,25 +58,11 @@ function readMangasData(mangaPaths) {
         throw console.log(err);
       }
       const mangaData = JSON.parse(res);
+      mangaData.id = mangaDir;
       mangas = [ ...mangas, mangaData ];
       mainWindow.webContents.send("library:mangaList", mangas);
     });
   });
-  // for (let mangaDir of mangaPaths) {
-  //   // await fs.readFile(path.join(LIBRARY_PATH, mangaDir, "data.json"), (err, res) => {
-  //   //   if (err) {
-  //   //     throw err;
-  //   //   }
-  //   //   const mangaData = JSON.parse(res);
-  //   //   mangas = [ ...mangas, mangaData ];
-  //   //   console.log('in fs');
-  //   // })
-  //   const jsonContent = fs.readFileSync(path.join(LIBRARY_PATH, mangaDir, "data.json"), 'utf8');
-  //   const mangaData = JSON.parse(jsonContent);
-  //   mangas = [ ...mangas, mangaData ];
-  //   console.log(jsonContent);
-  //   console.log('in loop');
-  // }
 }
 
 ipcMain.on("library:getMangas", () => {

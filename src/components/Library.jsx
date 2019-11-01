@@ -16,6 +16,7 @@ const Library = (props) => {
             style={{ width: 190, height: 300, borderRadius: "5%" }}
           />
           <div style={{ color: "white" }}>{manga.title}</div>
+          <div style={{ color: "white" }}>{manga.id}</div>
         </div>
       ))}
     </div>
