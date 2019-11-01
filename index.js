@@ -59,7 +59,12 @@ function readMangasData(mangaPaths) {
       }
       const mangaData = JSON.parse(res);
       mangaData.id = mangaDir;
-      mangas = [ ...mangas, mangaData ];
+      mangas = [ ...mangas, mangaData ].sort((a, b) => {
+        if (a.id === b.id) {
+          return 0;
+        }
+        return a.id > b.id ? 1 : -1;
+      });
       mainWindow.webContents.send("library:mangaList", mangas);
     });
   });

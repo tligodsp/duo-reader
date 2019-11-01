@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import { Provider } from 'react-redux';
 import store from './store';
-import Library from './components/Library';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Library from './components/Library/Library';
+
+import { routes } from './routes';
 
 class App extends Component {
   state = {
@@ -16,16 +19,18 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <div style={{ backgroundColor: "#272b30", height: "100vh" }}>
-          {/* <h1>Welcome to Electron with React</h1>
-          <p>Communicate with Main Process:</p>
-          <div>{this.state.count}</div>
-          <button onClick={this.onButtonClick}>Click me!</button>
-          <button onClick={this.onIncCountClick}>Inc count</button>
-          <img src="file:///G:/ProjectsRelatedData/DuoReader/manga/test.jpg" />
-          <p>Message from server: {this.state.msgFromMainProcess}</p> */}
-          <Library></Library>
-        </div>
+        <BrowserRouter>
+          <div style={{ backgroundColor: "#272b30", height: "100vh" }}>
+            <Switch>
+              { routes.map(({ path, component }) => (
+                <Route path={path}>
+                  { component }
+                </Route>
+              )) }
+            </Switch>
+            {/* <Library></Library> */}
+          </div>
+        </BrowserRouter>
       </Provider>
       
     );
