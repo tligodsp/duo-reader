@@ -55,7 +55,7 @@ function readMangasData(mangaPaths) {
   mangaPaths.forEach(mangaDir => {
     fs.readFile(path.join(LIBRARY_PATH, mangaDir, "data.json"), (err, res) => {
       if (err) {
-        throw console.log(err);
+        throw err;
       }
       const mangaData = JSON.parse(res);
       mangaData.id = mangaDir;
@@ -85,5 +85,25 @@ ipcMain.on("manga:getCurrent", (event, id) => {
   mainWindow.webContents.send("manga:current", currentManga);
 });
 
-ipcMain.on("manga:getChapters", (event, manga) => {
+ipcMain.on("chapter:getContent", (event, { mangaId, chapterId }) => {
+  const enChapterPath = path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, "en");
+  const jpChapterPath = path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, "jp");
+  let chapterContent = {
+    enImgPaths: [],
+    jpImgPaths: [],
+    languages: [],
+  };
+  fs.readdir(enChapterPath, (err, items) => {
+    console.log(enChapterPath);
+    let enImgPaths = items.filter(() => true); //to be added: check image
+    chapterContent = { ...chapterContent, enImgPaths: enImgPaths, languages: [...chapterContent.languages, 'en'] };
+    mainWindow.webContents.send("chapter:content", chapterContent);
+    console.log(enImgPaths);
+  });
+  fs.readdir(jpChapterPath, (err, items) => {
+    let jpImgPaths = items.filter(() => true); //to be added: check image
+    chapterContent = { ...chapterContent, jpImgPaths: jpImgPaths, languages: [...chapterContent.languages, 'jp'] };
+    mainWindow.webContents.send("chapter:content", chapterContent);
+    console.log(jpImgPaths);
+  });
 });

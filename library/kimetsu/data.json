@@ -2,13 +2,22 @@
 	"title": "Kimetsu no Yaiba",
 	"chapters": [
 		{
-			"id": "ch00070.00",
+			"id": "ch00070",
 			"path": "chapters/ch00070",
 			"title": "Kidnap",
 			"chapterNumber": "70",
 			"volumeNumber": "8",
 			"languages": [ "en", "jp"]
+		},
+		{
+			"id": "ch00001",
+			"path": "chapters/ch00001",
+			"title": "Becoming the Master of All Youkai",
+			"chapterNumber": "1",
+			"volumeNumber": "1",
+			"languages": [ "en", "jp"]
 		}
+
 	],
 	"cover": "covers/vol1.jpg",
 	"author": "Gotouge Koyoharu",

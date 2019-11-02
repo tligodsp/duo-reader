@@ -3,7 +3,6 @@ import './App.css';
 import { Provider } from 'react-redux';
 import store from './store';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Library from './components/Library/Library';
 
 import { routes } from './routes';
 

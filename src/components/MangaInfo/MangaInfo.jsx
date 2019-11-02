@@ -93,15 +93,20 @@ const MangaInfo = (props) => {
             </div>
           </div>
           <hr style={{ height: "1px", color: "black", backgroundColor: "#222" }}></hr>
-          <Link className={classes['chapters-container']}>
+          <div>
             { 
               manga.chapters?
                 manga.chapters.map(chapter => (
-                <div>Vol. {chapter.volumeNumber} Ch.{chapter.chapterNumber} - {chapter.title}</div>
+                <Link 
+                  className={classes['chapters-container']}
+                  to={ "/reader/" + manga.id + "/" + chapter.id }
+                >
+                  Vol. {chapter.volumeNumber} Ch.{chapter.chapterNumber} - {chapter.title}
+                </Link>
                 ))
               : null 
             }
-          </Link>
+          </div>
         </Card.Body>
       </Card>
     </div>
