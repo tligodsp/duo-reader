@@ -3,10 +3,18 @@
 	"chapters": [
 		{
 			"id": "ch00001.00",
-			"lang": [ "en", "jp"],
-			"en": "chapters/ch00001/en",
-			"jp": "chapters/ch00001/jp"
+			"path": "chapters/ch00001",
+			"title": "Becoming the Master of All Youkai",
+			"chapterNumber": "1",
+			"volumeNumber": "1",
+			"languages": [ "en", "jp"]
 		}
 	],
-	"cover": "covers/vol1.jpg"
+	"cover": "covers/vol1.jpg",
+	"author": "Shiibashi Hiroshi",
+	"artist": "Shiibashi Hiroshi",
+	"description": "Rikuo Nura is descended from Nurarihyon, Grand Master of the spirit world, but appears to be just a normal kid. He usually just wants to live peacefully as a human, but when his friends and allies are in trouble, his spirit blood boils, and he transforms into Nurarihyon to wipe out evil! A new concept story combining spirits and chivalry! A piquant, gallant ghost action story!",
+	"genres": [ "Shounen", "Action", "Adventure", "Comedy", "Fantasy" ],
+	"publishYear": "2008",
+	"publishStatus": "Completed"
 }

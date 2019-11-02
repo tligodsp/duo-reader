@@ -13,6 +13,7 @@ const Library = (props) => {
   let history = useHistory();
 
   const onMangaClick = (id) => {
+    
     history.push("/manga-info/" + id);
   }
 

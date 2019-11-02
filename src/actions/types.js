@@ -1,1 +1,3 @@
 export const GET_MANGAS = 'GET_MANGAS';
+export const GET_CURRENT_MANGA = 'GET_CURRENT_MANGA';
+export const GET_MANGA_CHAPTERS = 'GET_MANGA_CHAPTERS';

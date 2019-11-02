@@ -3,10 +3,18 @@
 	"chapters": [
 		{
 			"id": "ch00070.00",
-			"lang": [ "en", "jp"],
-			"en": "chapters/ch00070/en",
-			"jp": "chapters/ch00070/jp"
+			"path": "chapters/ch00070",
+			"title": "Kidnap",
+			"chapterNumber": "70",
+			"volumeNumber": "8",
+			"languages": [ "en", "jp"]
 		}
 	],
-	"cover": "covers/vol1.jpg"
+	"cover": "covers/vol1.jpg",
+	"author": "Gotouge Koyoharu",
+	"artist": "Gotouge Koyoharu",
+	"description": "Since ancient times, rumors have abounded of man-eating demons lurking in the woods. Because of this, the local townsfolk never venture outside at night. Legend has it that a demon slayer also roams the night, hunting down these bloodthirsty demons. Ever since the death of his father, Tanjirou has taken it upon himself to support his mother and five siblings. Although their lives may be hardened by tragedy, they've found happiness. But that ephemeral warmth is shattered one day when Tanjirou finds his family slaughtered and the lone survivor, his sister Nezuko, turned into a demon. Adding to this sorrow, a demon hunter named Tomioka Giyuu arrived and was about to finish Nezuko off, but to his surprise she and Tanjiro started to protect each other. Seeing this oddity and Tanjiro's promising fighting skills, Giyuu decides to send them to his old mentor to be trained. So begins Tanjiro's life as a demon hunter, bound on a quest to cure his sister and find the one who murdered his entire family.",
+	"genres": [ "Shounen", "Action", "Comedy", "Drama" ],
+	"publishYear": "2016",
+	"publishStatus": "Ongoing"
 }

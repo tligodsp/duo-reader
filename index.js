@@ -78,3 +78,12 @@ ipcMain.on("library:getMangas", () => {
     mainWindow.webContents.send("library:mangaList", mangas);
   });
 });
+
+ipcMain.on("manga:getCurrent", (event, id) => {
+  const currentManga = mangas.find(manga => manga.id === id);
+  // console.log(currentManga);
+  mainWindow.webContents.send("manga:current", currentManga);
+});
+
+ipcMain.on("manga:getChapters", (event, manga) => {
+});
