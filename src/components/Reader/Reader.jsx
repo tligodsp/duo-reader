@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { getPageFullPath } from '../../utils/helpers';
-import { getChapterContent } from '../../actions/chapterActions';
+import { getChapterContent, chapterClear } from '../../actions/chapterActions';
 
 const ReadingPage = (props) => {
   const [ pages, setPages ] = useState([]);
@@ -14,13 +14,17 @@ const ReadingPage = (props) => {
 
   useEffect(() => {
     props.getChapterContent(mangaId, chapterId);
+    console.log(chapter);
+    return () => {
+      props.chapterClear();
+    }
   }, []);
 
   useEffect(() => {
-    if (chapter.enImgPaths && chapter.jpImgPaths && pages.length === 0) {
+    if (!props.chapter.loading && chapter.imgPaths && chapter.imgPaths.length === chapter.languages.length && pages.length === 0) {
       let tmpPageArray = [];
-      for (let pagePath of chapter.jpImgPaths) {
-        tmpPageArray = [ ...tmpPageArray, { pagePath: pagePath, language: 'jp' } ];
+      for (let pagePath of chapter.imgPaths[0]) {
+        tmpPageArray = [ ...tmpPageArray, { pagePath: pagePath, language: chapter.languages[0] } ];
       }
       setPages([ ...tmpPageArray ]);
     }
@@ -33,11 +37,11 @@ const ReadingPage = (props) => {
     var tmpPages = [ ...pages ];
     if (page.language === chapter.languages[0]) {
       tmpPages[pageIndex].language = chapter.languages[1];
-      tmpPages[pageIndex].pagePath = chapter.enImgPaths[pageIndex];
+      tmpPages[pageIndex].pagePath = chapter.imgPaths[1][pageIndex];
     }
     else {
       tmpPages[pageIndex].language = chapter.languages[0];
-      tmpPages[pageIndex].pagePath = chapter.jpImgPaths[pageIndex];
+      tmpPages[pageIndex].pagePath = chapter.imgPaths[0][pageIndex];
     }
     setPages([ ...tmpPages ]);
   }
@@ -69,4 +73,4 @@ const mapStateToProps = (state) => ({
   chapter: state.chapter,
 });
 
-export default connect(mapStateToProps, { getChapterContent })(ReadingPage);
+export default connect(mapStateToProps, { getChapterContent, chapterClear })(ReadingPage);

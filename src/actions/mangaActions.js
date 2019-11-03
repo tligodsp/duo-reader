@@ -1,4 +1,4 @@
-import { GET_CURRENT_MANGA } from './types';
+import { GET_CURRENT_MANGA, CLEAR_CURRENT_MANGA } from './types';
 const { ipcRenderer } = window.require("electron");
 
 export const getCurrentManga = (id) => dispatch => {
@@ -9,4 +9,10 @@ export const getCurrentManga = (id) => dispatch => {
       payload: manga
     });
   });
-}
+};
+
+export const clearCurrentManga = () => {
+  return {
+    type: CLEAR_CURRENT_MANGA
+  };
+};

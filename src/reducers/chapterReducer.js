@@ -1,4 +1,4 @@
-import { GET_CHAPTER_CONTENT, CHAPTER_CONTENT_LOADING } from '../actions/types';
+import { GET_CHAPTER_CONTENT, CHAPTER_CONTENT_LOADING, CHAPTER_CLEAR } from '../actions/types';
 
 const initialState = {
   chapter: {},
@@ -16,8 +16,11 @@ const chapterReducer = (state = initialState, action) => {
     case CHAPTER_CONTENT_LOADING:
       return {
         ...state,
+        chapter: {},
         loading: true
       };
+    case CHAPTER_CLEAR:
+      return initialState;
     default:
       return state;
   }

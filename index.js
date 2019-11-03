@@ -86,24 +86,55 @@ ipcMain.on("manga:getCurrent", (event, id) => {
 });
 
 ipcMain.on("chapter:getContent", (event, { mangaId, chapterId }) => {
-  const enChapterPath = path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, "en");
-  const jpChapterPath = path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, "jp");
-  let chapterContent = {
-    enImgPaths: [],
-    jpImgPaths: [],
-    languages: [],
-  };
-  fs.readdir(enChapterPath, (err, items) => {
-    console.log(enChapterPath);
-    let enImgPaths = items.filter(() => true); //to be added: check image
-    chapterContent = { ...chapterContent, enImgPaths: enImgPaths, languages: [...chapterContent.languages, 'en'] };
-    mainWindow.webContents.send("chapter:content", chapterContent);
-    console.log(enImgPaths);
-  });
-  fs.readdir(jpChapterPath, (err, items) => {
-    let jpImgPaths = items.filter(() => true); //to be added: check image
-    chapterContent = { ...chapterContent, jpImgPaths: jpImgPaths, languages: [...chapterContent.languages, 'jp'] };
-    mainWindow.webContents.send("chapter:content", chapterContent);
-    console.log(jpImgPaths);
+  // const enChapterPath = path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, "en");
+  // const jpChapterPath = path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, "jp");
+  // let chapterContent = {
+  //   enImgPaths: [],
+  //   jpImgPaths: [],
+  //   languages: [],
+  // };
+  // fs.readdir(enChapterPath, (err, items) => {
+  //   console.log(enChapterPath);
+  //   let enImgPaths = items.filter(() => true); //to be added: check image
+  //   chapterContent = { ...chapterContent, enImgPaths: enImgPaths, languages: [...chapterContent.languages, 'en'] };
+  //   mainWindow.webContents.send("chapter:content", chapterContent);
+  //   console.log(enImgPaths);
+  // });
+  // fs.readdir(jpChapterPath, (err, items) => {
+  //   let jpImgPaths = items.filter(() => true); //to be added: check image
+  //   chapterContent = { ...chapterContent, jpImgPaths: jpImgPaths, languages: [...chapterContent.languages, 'jp'] };
+  //   mainWindow.webContents.send("chapter:content", chapterContent);
+  //   console.log(jpImgPaths);
+  // });
+  fs.readFile(path.join(LIBRARY_PATH, mangaId, "data.json"), (err, res) => {
+    if (err) {
+      throw err;
+    }
+    const curManga = JSON.parse(res);
+    const languages = curManga.chapters.find(chapter => chapter.id === chapterId).languages;
+    console.log(languages);
+    let chapterPaths = [];
+    for (let language of languages) {
+      console.log(language);
+      chapterPaths.push(path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, language));
+    }
+    let chapterContent = {
+        imgPaths: [],
+        languages: languages,
+    };
+
+    for (let chapterPath of chapterPaths) {    
+      // fs.readdir(chapterPath, (err, items) => {
+      //   let images = items.filter(() => true); //to be added: check image
+      //   chapterContent = { ...chapterContent, imgPaths: [ ...chapterContent.imgPaths, images ]};
+      //   mainWindow.webContents.send("chapter:content", chapterContent);
+      //   console.log(images);
+      // });
+      const items = fs.readdirSync(chapterPath);
+      let images = items.filter(() => true); //to be added: check image
+      chapterContent = { ...chapterContent, imgPaths: [ ...chapterContent.imgPaths, images ]};
+      mainWindow.webContents.send("chapter:content", chapterContent);
+      console.log(images);
+    }
   });
 });

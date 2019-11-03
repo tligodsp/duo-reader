@@ -5,13 +5,16 @@ import { Card } from 'react-bootstrap';
 import classes from './MangaInfo.module.scss';
 import { getCoverFullPath } from '../../utils/helpers';
 
-import { getCurrentManga } from '../../actions/mangaActions';
+import { getCurrentManga, clearCurrentManga } from '../../actions/mangaActions';
 
 const MangaInfo = (props) => {
   let { id } = useParams();
 
   useEffect(() => {
     props.getCurrentManga(id);
+    return () => {
+      props.clearCurrentManga()
+    };
   }, []);
 
   const { manga } = props.manga;
@@ -117,4 +120,4 @@ const mapStateToProps = (state) => ({
   manga: state.manga
 });
 
-export default connect(mapStateToProps, { getCurrentManga })(MangaInfo);
+export default connect(mapStateToProps, { getCurrentManga, clearCurrentManga })(MangaInfo);
