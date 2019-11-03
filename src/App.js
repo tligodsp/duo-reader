@@ -19,7 +19,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <div style={{ backgroundColor: "#272b30", height: "100vh" }}>
+          <div style={{ backgroundColor: "#272b30", minHeight: "100vh", padding: "10px" }}>
             <Switch>
               { routes.map(({ path, component }) => (
                 <Route path={path}>

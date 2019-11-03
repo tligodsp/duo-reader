@@ -1,0 +1,13 @@
+.pages-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .manga-page-container {
+    margin: 10px 0;
+    
+    .manga-page {
+      width: 960px;
+    }
+  }
+}

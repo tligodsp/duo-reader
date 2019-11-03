@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { getPageFullPath } from '../../utils/helpers';
 import { getChapterContent, chapterClear } from '../../actions/chapterActions';
+import classes from './Reader.module.scss';
 
 const ReadingPage = (props) => {
   const [ pages, setPages ] = useState([]);
@@ -21,7 +22,10 @@ const ReadingPage = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!props.chapter.loading && chapter.imgPaths && chapter.imgPaths.length === chapter.languages.length && pages.length === 0) {
+    if (!props.chapter.loading && 
+        chapter.imgPaths && 
+        chapter.imgPaths.length === chapter.languages.length && 
+        pages.length === 0) {
       let tmpPageArray = [];
       for (let pagePath of chapter.imgPaths[0]) {
         tmpPageArray = [ ...tmpPageArray, { pagePath: pagePath, language: chapter.languages[0] } ];
@@ -51,14 +55,14 @@ const ReadingPage = (props) => {
       <Link to={`/manga-info/${mangaId}`}>
         Back
       </Link>
-      <div>
+      <div className={classes['pages-container']}>
         { 
           pages.map(page => (
-            <div>
+            <div className={classes['manga-page-container']}>
               <img
                 src={getPageFullPath(mangaId, chapterId, page.language, page.pagePath )} 
                 alt={page.pagePath}
-                style={{ width: "960px" }}
+                className={classes['manga-page']}
                 onClick={switchPageLanguage.bind(this, page)}
               />
             </div>
