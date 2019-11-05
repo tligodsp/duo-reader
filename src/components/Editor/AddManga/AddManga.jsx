@@ -7,16 +7,26 @@ import { useFormik } from 'formik';
 import { getMangas } from '../../../actions/libraryActions';
 
 const AddManga = (props) => {
-  // const [formData, setFormData] = useState({
-  //   id: '',
-  //   title: '',
-  //   author: '',
-  //   artist: '',
-  //   description: '',
-  //   genres: '',
-  //   publishYear: '',
-  //   publishStatus: ''
-  // });
+
+  const validate = values => {
+    const errors = {};
+
+    if (!values.id) {
+      errors.id = 'Required';
+    }
+    else {
+      const mangas = props.library.mangas;
+      if (!(mangas.findIndex(manga => manga.id === values.id) === -1)) {
+        errors.id = 'Id already exists';
+      }
+    }
+
+    if (!values.title) {
+      errors.title = 'Required'
+    }
+
+    return errors;
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -29,6 +39,7 @@ const AddManga = (props) => {
       publishYear: '',
       publishStatus: ''
     },
+    validate,
     onSubmit: values => {
       alert(JSON.stringify(values, null, 2));
     }
@@ -37,18 +48,6 @@ const AddManga = (props) => {
   useEffect(() => {
     props.getMangas();
   }, []);
-
-  // const handleChange = (event) => {
-  //   // console.log(event.target);
-  //   setFormData({
-  //     ...formData,
-  //     [event.target.name]: event.target.value
-  //   });
-  // };
-
-  const handleSubmit = () => {
-    
-  }
 
   return (
     <div>
@@ -72,8 +71,16 @@ const AddManga = (props) => {
                   name="id"
                   placeholder="Manga Id (This will be used for manga directory)" 
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   value={formik.values.id}
+                  isInvalid={formik.touched.id && formik.errors.id}
+                  isValid={formik.touched.id && !formik.errors.id}
                 />
+                <Form.Control.Feedback type="invalid">{formik.errors.id}</Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">Looking cool Joker</Form.Control.Feedback>
+              {/* {formik.touched.id && formik.errors.id ? 
+                <Form.Control.Feedback type="invalid">{formik.errors.id}</Form.Control.Feedback> : null
+              } */}
               </Form.Group>
 
               <Form.Group controlId="title">
@@ -83,8 +90,13 @@ const AddManga = (props) => {
                   name="title" 
                   placeholder="Manga Title" 
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   value={formik.values.title}
+                  isInvalid={formik.touched.title && formik.errors.title}
+                  isValid={formik.touched.title && !formik.errors.title}
                 />
+                <Form.Control.Feedback type="invalid">{formik.errors.title}</Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">Looking cool Joker</Form.Control.Feedback>
               </Form.Group>
 
             <Form.Row>
@@ -97,6 +109,9 @@ const AddManga = (props) => {
                   onChange={formik.handleChange}
                   value={formik.values.author}
                 />
+                <Form.Control.Feedback type="invalid">
+              Please choose a username.
+            </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group as={Col} controlId="artist">
