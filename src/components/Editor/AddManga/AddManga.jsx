@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 
 import { getMangas } from '../../../actions/libraryActions';
+const { ipcRenderer } = window.require("electron");
 
 const AddManga = (props) => {
 
@@ -22,7 +23,19 @@ const AddManga = (props) => {
     }
 
     if (!values.title) {
-      errors.title = 'Required'
+      errors.title = 'Required';
+    }
+
+    const d = new Date();
+
+    if (values.publishYear && !/^\d+$/.test(values.publishYear)) {
+      errors.publishYear = 'Numbers only plz';
+    }
+    else if (values.publishYear && parseInt(values.publishYear, 10) < 1900) {
+      errors.publishYear = 'Wtf is this ancient shit?';
+    }
+    else if (values.publishYear && parseInt(values.publishYear, 10) > d.getFullYear()) {
+      errors.publishYear = 'Wow hello there time traveler';
     }
 
     return errors;
@@ -34,6 +47,7 @@ const AddManga = (props) => {
       title: '',
       author: '',
       artist: '',
+      cover: '',
       description: '',
       genres: '',
       publishYear: '',
@@ -41,7 +55,29 @@ const AddManga = (props) => {
     },
     validate,
     onSubmit: values => {
+      if (values.author === "") {
+        values.author = "None";
+      }
+      if (values.artist === "") {
+        values.artist = "None";
+      }
+      if (values.cover === "") {
+        values.cover = "covers/default_cover.jpg";
+      }
+      if (values.genres === "") {
+        values.genres = ["None"];
+      }
+      if (values.description === "") {
+        values.description = "None";
+      }
+      if (values.publishYear === "") {
+        values.publishYear = "1970";
+      }
+      if (values.publishStatus === "") {
+        values.publishStatus = "Ongoing";
+      }
       alert(JSON.stringify(values, null, 2));
+      ipcRenderer.send("manga:saveFile", values);
     }
   });
 
@@ -169,8 +205,13 @@ const AddManga = (props) => {
                   name="publishYear"
                   placeholder="Publish Year" 
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   value={formik.values.publishYear}
+                  isInvalid={formik.touched.publishYear && formik.errors.publishYear}
+                  isValid={formik.touched.publishYear && !formik.errors.publishYear}
                 />
+                <Form.Control.Feedback type="invalid">{formik.errors.publishYear}</Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">Looking cool Joker</Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group as={Col} controlId="pubStatus">

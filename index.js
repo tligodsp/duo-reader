@@ -86,26 +86,6 @@ ipcMain.on("manga:getCurrent", (event, id) => {
 });
 
 ipcMain.on("chapter:getContent", (event, { mangaId, chapterId }) => {
-  // const enChapterPath = path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, "en");
-  // const jpChapterPath = path.join(LIBRARY_PATH, mangaId, "chapters", chapterId, "jp");
-  // let chapterContent = {
-  //   enImgPaths: [],
-  //   jpImgPaths: [],
-  //   languages: [],
-  // };
-  // fs.readdir(enChapterPath, (err, items) => {
-  //   console.log(enChapterPath);
-  //   let enImgPaths = items.filter(() => true); //to be added: check image
-  //   chapterContent = { ...chapterContent, enImgPaths: enImgPaths, languages: [...chapterContent.languages, 'en'] };
-  //   mainWindow.webContents.send("chapter:content", chapterContent);
-  //   console.log(enImgPaths);
-  // });
-  // fs.readdir(jpChapterPath, (err, items) => {
-  //   let jpImgPaths = items.filter(() => true); //to be added: check image
-  //   chapterContent = { ...chapterContent, jpImgPaths: jpImgPaths, languages: [...chapterContent.languages, 'jp'] };
-  //   mainWindow.webContents.send("chapter:content", chapterContent);
-  //   console.log(jpImgPaths);
-  // });
   fs.readFile(path.join(LIBRARY_PATH, mangaId, "data.json"), (err, res) => {
     if (err) {
       throw err;
@@ -138,3 +118,39 @@ ipcMain.on("chapter:getContent", (event, { mangaId, chapterId }) => {
     }
   });
 });
+
+ipcMain.on("manga:saveFile", (event, mangaData) => {
+  const mangaFolder = path.join(LIBRARY_PATH, mangaData.id);
+  const coverFolder = path.join(mangaFolder, 'covers');
+  if (!fs.existsSync(mangaFolder)) {
+    fs.mkdirSync(mangaFolder);
+  }
+  if (!fs.existsSync(coverFolder)) {
+    fs.mkdirSync(coverFolder);
+  }
+  // if (!fs.existsSync(path.join(LIBRARY_PATH, mangaData.id, 'covers'))) {
+  //   fs.mkdirSync(path.join(LIBRARY_PATH, mangaData.id, 'covers'), { recursive: true });
+  // }
+  if (!isImageFile(path.join(LIBRARY_PATH, mangaData.id, mangaData.cover))) {
+    fs.copyFile('assets/default_cover.jpg', path.join(LIBRARY_PATH, mangaData.id, 'covers/default_cover.jpg'), (err) => {
+      if (err) throw err;
+      fs.writeFileSync(path.join(LIBRARY_PATH, mangaData.id, "data.json"), JSON.stringify(mangaData, null, 2));
+    });
+  }
+  else {
+    fs.writeFileSync(path.join(LIBRARY_PATH, mangaData.id, "data.json"), JSON.stringify(mangaData, null, 2));
+  }
+});
+
+const isImageFile = (filePath) => {
+  console.log(filePath);
+  if (!fs.existsSync(filePath)) {
+    return false;
+  }
+  if (!fs.lstatSync(filePath).isFile()) {
+    return false;
+  }
+  const fileType = filePath.slice(-3, 3);
+  console.log(fileType);
+  return (fileType === 'jpg' || fileType === 'png') ? true : false;
+};
