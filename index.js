@@ -131,26 +131,35 @@ ipcMain.on("manga:saveFile", (event, mangaData) => {
   // if (!fs.existsSync(path.join(LIBRARY_PATH, mangaData.id, 'covers'))) {
   //   fs.mkdirSync(path.join(LIBRARY_PATH, mangaData.id, 'covers'), { recursive: true });
   // }
-  if (!isImageFile(path.join(LIBRARY_PATH, mangaData.id, mangaData.cover))) {
-    fs.copyFile('assets/default_cover.jpg', path.join(LIBRARY_PATH, mangaData.id, 'covers/default_cover.jpg'), (err) => {
+  if (!isImageFile(mangaData.cover)) {
+    fs.copyFile('assets/default_cover.jpg', path.join(coverFolder, 'default_cover.jpg'), (err) => {
       if (err) throw err;
+      mangaData.cover = 'covers/default_cover.jpg';
       fs.writeFileSync(path.join(LIBRARY_PATH, mangaData.id, "data.json"), JSON.stringify(mangaData, null, 2));
     });
   }
   else {
-    fs.writeFileSync(path.join(LIBRARY_PATH, mangaData.id, "data.json"), JSON.stringify(mangaData, null, 2));
+    fs.copyFile(mangaData.cover, path.join(coverFolder, 'default_cover.jpg'), (err) => {
+      if (err) throw err;
+      mangaData.cover = 'covers/default_cover.jpg';
+      fs.writeFileSync(path.join(LIBRARY_PATH, mangaData.id, "data.json"), JSON.stringify(mangaData, null, 2));
+    });
   }
 });
 
 const isImageFile = (filePath) => {
-  console.log(filePath);
+  console.log(filePath + ' sadasdsdadasdas');
+  console.log(fs.existsSync(filePath));
   if (!fs.existsSync(filePath)) {
+    console.log(1);
     return false;
   }
+  console.log(fs.lstatSync(filePath).isFile());
   if (!fs.lstatSync(filePath).isFile()) {
+    console.log(2);
     return false;
   }
-  const fileType = filePath.slice(-3, 3);
+  const fileType = path.extname(filePath);
   console.log(fileType);
-  return (fileType === 'jpg' || fileType === 'png') ? true : false;
+  return (fileType === '.jpg' || fileType === '.png') ? true : false;
 };

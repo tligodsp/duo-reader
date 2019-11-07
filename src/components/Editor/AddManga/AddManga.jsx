@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Col, Button, Alert } from 'react-bootstrap';
+import { Form, Col, Button, Alert, InputGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 
 import { getMangas } from '../../../actions/libraryActions';
+import { InputGroupAppend } from 'react-bootstrap/InputGroup';
 const { ipcRenderer } = window.require("electron");
+const { dialog } = window.require("electron").remote;
 
 const AddManga = (props) => {
 
@@ -85,6 +87,21 @@ const AddManga = (props) => {
     props.getMangas();
   }, []);
 
+  const test = () => {
+    console.log();
+  }
+
+  const onCoverButtonClick = () => {
+    const coverPath = dialog.showOpenDialog({ properties: ['openFile'] }) ? 
+                        dialog.showOpenDialog({ properties: ['openFile'] })[0].replace(/\\/g,"/")
+                        : '';
+    // console.log(coverPath);
+    formik.setValues({
+      ...formik.values,
+      cover: coverPath
+    })
+  }
+
   return (
     <div>
       <Link to="/editor">Back</Link>
@@ -99,8 +116,9 @@ const AddManga = (props) => {
               Cras mattis consectetur purus sit amet fermentum.
             </p>
           </Alert>
+          <Button onClick={test}>Click</Button>
           <Form onSubmit={formik.handleSubmit}>
-              <Form.Group controlId="title">
+              <Form.Group>
                 <Form.Label>Id</Form.Label>
                 <Form.Control
                   id="id"
@@ -119,7 +137,7 @@ const AddManga = (props) => {
               } */}
               </Form.Group>
 
-              <Form.Group controlId="title">
+              <Form.Group>
                 <Form.Label>Title</Form.Label>
                 <Form.Control
                   id="title" 
@@ -136,7 +154,7 @@ const AddManga = (props) => {
               </Form.Group>
 
             <Form.Row>
-              <Form.Group as={Col} controlId="author">
+              <Form.Group as={Col}>
                 <Form.Label>Author</Form.Label>
                 <Form.Control
                   id="author"
@@ -150,7 +168,7 @@ const AddManga = (props) => {
             </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="artist">
+              <Form.Group as={Col}>
                 <Form.Label>Artist</Form.Label>
                 <Form.Control
                   id="artist"
@@ -162,18 +180,23 @@ const AddManga = (props) => {
               </Form.Group>
             </Form.Row>
 
-            <Form.Group controlId="cover">
+            <Form.Group>
               <Form.Label>Cover Image</Form.Label>
-              <Form.Control
-                id="cover"
-                name="cover" 
-                placeholder="Cover Image Path" 
-                onChange={formik.handleChange}
-                value={formik.values.cover}
-              />
+              <InputGroup>
+                <Form.Control
+                  id="cover"
+                  name="cover"
+                  placeholder="Cover Image Path" 
+                  onChange={formik.handleChange}
+                  value={formik.values.cover}
+                />
+                <InputGroup.Append>
+                  <Button variant="secondary" onClick={onCoverButtonClick}>...</Button>
+                </InputGroup.Append>
+              </InputGroup>
             </Form.Group>
 
-            <Form.Group controlId="genres">
+            <Form.Group>
               <Form.Label>Genres</Form.Label>
               <Form.Control
                 id="genres"
@@ -184,7 +207,7 @@ const AddManga = (props) => {
               />
             </Form.Group>
 
-            <Form.Group controlId="description">
+            <Form.Group>
               <Form.Label>Manga Description</Form.Label>
               <Form.Control 
                 as= "textarea"
@@ -198,7 +221,7 @@ const AddManga = (props) => {
             </Form.Group>
 
             <Form.Row>
-              <Form.Group as={Col} controlId="pubYear">
+              <Form.Group as={Col}>
                 <Form.Label>Publish Year</Form.Label>
                 <Form.Control
                   id="publishYear"
@@ -214,7 +237,7 @@ const AddManga = (props) => {
                 <Form.Control.Feedback type="valid">Looking cool Joker</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="pubStatus">
+              <Form.Group as={Col}>
                 <Form.Label>Publish Status</Form.Label>
                 <Form.Control
                   id="publishStatus"
