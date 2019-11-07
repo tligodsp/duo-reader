@@ -17,6 +17,9 @@ const AddManga = (props) => {
     if (!values.id) {
       errors.id = 'Required';
     }
+    else if (!/^[a-zA-Z0-9]*$/.test(values.id)) {
+      errors.id = "Only letters and numbers plz";
+    }
     else {
       const mangas = props.library.mangas;
       if (!(mangas.findIndex(manga => manga.id === values.id) === -1)) {
@@ -92,9 +95,8 @@ const AddManga = (props) => {
   }
 
   const onCoverButtonClick = () => {
-    const coverPath = dialog.showOpenDialog({ properties: ['openFile'] }) ? 
-                        dialog.showOpenDialog({ properties: ['openFile'] })[0].replace(/\\/g,"/")
-                        : '';
+    const fileSelected = dialog.showOpenDialog({ properties: ['openFile'] });
+    const coverPath = fileSelected ? fileSelected[0].replace(/\\/g,"/") : '';
     // console.log(coverPath);
     formik.setValues({
       ...formik.values,
@@ -242,10 +244,15 @@ const AddManga = (props) => {
                 <Form.Control
                   id="publishStatus"
                   name="publishStatus"
-                  placeholder="Publish Status" 
+                  as="select"
                   onChange={formik.handleChange}
                   value={formik.values.publishStatus}
-                />
+                >
+                  <option value="">Choose...</option>
+                  <option value="Ongoing">Ongoing</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Canceled">Cancelled</option>
+                </Form.Control>
               </Form.Group>
             </Form.Row>
 
