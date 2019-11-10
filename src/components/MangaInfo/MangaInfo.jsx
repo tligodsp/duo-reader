@@ -4,17 +4,12 @@ import { connect } from "react-redux";
 import { Card } from "react-bootstrap";
 import classes from "./MangaInfo.module.scss";
 import { getCoverFullPath } from "../../utils/helpers";
-import {
-  Button,
-  Modal,
-  Form,
-  Col,
-  InputGroup,
-  DropdownButton,
-  Dropdown
-} from "react-bootstrap";
-import { useFormik } from "formik";
+import { Button, Modal, Form, Col, InputGroup } from "react-bootstrap";
+import { useFormik, Field, FieldArray } from "formik";
 import { getCurrentManga, clearCurrentManga } from "../../actions/mangaActions";
+
+const { ipcRenderer } = window.require("electron");
+const { dialog } = window.require("electron").remote;
 
 const MangaInfo = props => {
   let { id } = useParams();
@@ -148,13 +143,43 @@ const MangaInfo = props => {
 };
 
 const AddChapterModal = props => {
-  let chapterByLangArr = [{ language: "", imagesPath: "" }];
-
   const handleAddLanguageImagesPath = () => {
     formik.setValues({
       ...formik.values,
-      imagesPaths: [ ...formik.values.imagesPaths, { language: "", imagesPath: "" } ]
-    })
+      imagesPaths: [
+        ...formik.values.imagesPaths,
+        { language: "", imagesPath: "" }
+      ]
+    });
+  };
+
+  const validate = values => {
+    const errors = {};
+
+    return errors;
+  };
+
+  const handleDeleteChapterByLang = index => {
+    // formik.setValues({
+    //   ...formik.values,
+    //   imagesPaths: formik.values.imagesPaths.filter(
+    //     imagePath => imagePath !== chapterByLang
+    //   )
+    // });
+    console.log(formik.values.imagesPaths[index]);
+  };
+
+  const handleImagePathButtonClick = (index) => {
+    const selectedFolder = dialog.showOpenDialog({ properties: ["openDirectory"] });
+    const chapterPath = selectedFolder ? selectedFolder[0].replace(/\\/g, "/") : "";
+    console.log(chapterPath);
+    const newImagesPaths = formik.values.imagesPaths;
+    newImagesPaths[index].imagesPath = chapterPath;
+    formik.setValues({
+      ...formik.values,
+      imagesPaths: newImagesPaths
+    });
+    console.log(formik.values);
   }
 
   const formik = useFormik({
@@ -164,7 +189,8 @@ const AddChapterModal = props => {
       chapterNumber: "",
       volumeNumber: "",
       imagesPaths: [{ language: "", imagesPath: "" }]
-    }
+    },
+    validate
   });
   return (
     <Modal show={props.show} onHide={props.handleClose}>
@@ -222,33 +248,64 @@ const AddChapterModal = props => {
               value={formik.values.chapterId}
             />
           </Form.Group>
-          
+
           <Form.Label>Images path(s)</Form.Label>
-          {formik.values.imagesPaths.map(imagesPath => (
-            <Form.Row>
-              <Form.Group as={Col} md="3" controlId="formGridState">
-                <Form.Control as="select">
-                  <option>Lang</option>
-                  <option>...</option>
-                </Form.Control>
-              </Form.Group>
-              <Form.Group as={Col}>
-                <InputGroup md="9">
-                  <Form.Control />
-                  <InputGroup.Append>
-                    <Button variant="outline-secondary">...</Button>
-                    <Button variant="outline-danger" >&times;</Button>
-                  </InputGroup.Append>
-                </InputGroup>
-              </Form.Group>
-            </Form.Row>
+          {/* <FieldArray
+            name="imagesPaths"
+            render={arrayHelpers => (
+              <div> */}
+          {formik.values.imagesPaths.map((imagesPath, index) => (
+            <div key={index}>
+              <Form.Row>
+                <Form.Group as={Col} md="3">
+                  <Form.Control
+                    as="select"
+                    name={`imagesPaths[${index}].language`}
+                    onChange={formik.handleChange}
+                    value={formik.values.imagesPaths[index].language}
+                  >
+                    <option value="">Lang</option>
+                    <option value="en">en</option>
+                    <option value="jp">jp</option>
+                    <option value="vn">vn</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <InputGroup md="9">
+                    <Form.Control
+                      name={`imagesPaths[${index}].imagesPath`}
+                      placeholder="Images Path"
+                      onChange={formik.handleChange}
+                      value={formik.values.imagesPaths[index].imagesPath}
+                    />
+                    <InputGroup.Append>
+                      <Button
+                        variant="outline-secondary"
+                        onClick={handleImagePathButtonClick.bind(this, index)}
+                      >...</Button>
+                      <Button
+                        variant="outline-danger"
+                        onClick={handleDeleteChapterByLang.bind(this, index)}
+                      >
+                        &times;
+                      </Button>
+                    </InputGroup.Append>
+                  </InputGroup>
+                </Form.Group>
+              </Form.Row>
+            </div>
           ))}
+          {/* </div>
+            )}
+          /> */}
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
               variant="outline-primary"
               style={{ flex: "1" }}
               onClick={handleAddLanguageImagesPath}
-            >+</Button>
+            >
+              +
+            </Button>
           </div>
         </Form>
       </Modal.Body>
