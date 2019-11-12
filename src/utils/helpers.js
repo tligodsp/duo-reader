@@ -28,3 +28,15 @@ export const comparePageNum = (imgPath1, imgPath2) => {
 
   return num1 > num2 ? 1 : -1;
 }
+
+export const generateChapterID = (chapterNumber) => {
+  let chapterID = chapterNumber.replace(".", "_");
+  let count;
+  for (count = 0; chapterID[count] !== "_" && count < chapterID.length; count++) {}
+  // count += 1;
+  if (count > 5) {
+    return "thatsOneHellOfALongMangaBruh";
+  }
+  chapterID = "ch" + "0".repeat(5 - count) + chapterID;
+  return chapterID;
+}

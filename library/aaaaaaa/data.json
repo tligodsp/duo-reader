@@ -1,13 +1,1 @@
-{
-  "artist": "None",
-  "author": "None",
-  "cover": "covers/default_cover.jpg",
-  "description": "None",
-  "genres": [
-    "None"
-  ],
-  "id": "aaaaaaa",
-  "publishStatus": "Ongoing",
-  "publishYear": "1970",
-  "title": "aaaaaaaa"
-}
+{"artist":"None","author":"None","cover":"covers/default_cover.jpg","description":"None","genres":["None"],"id":"aaaaaaa","publishStatus":"Ongoing","publishYear":"1970","title":"aaaaaaaa","chapters":[{"chapterNumber":"3","languages":["en","jp"],"title":"3333333","volumeNumber":"1","id":"ch00003","path":"chapters/ch00003"},{"chapterNumber":"0","languages":["jp","en"],"title":"asdasdasasd","volumeNumber":"1","id":"ch00000","path":"chapters/ch00000"}]}
